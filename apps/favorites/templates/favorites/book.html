@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"> -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <style>
+        * {
+            margin: 20px;
+            width: 1000px;
+        }
+        .makeitgo {
+            color: rgb(198, 23, 23);
+        }
+        .makeitso {
+            color: rgb(36, 154, 36);
+        }
+        .header {
+            border-bottom: 1px solid black;
+        }
+        .left {
+            display: inline-block;
+            vertical-align: top;
+            width: 30%;
+        }
+        .left p {
+            width: 100%;
+        }
+        .right {
+            display: inline-block;
+            vertical-align: top;
+            width: 30%;
+            margin-left: 200px;
+        }
+        h3 {
+            display: inline-block;
+            vertical-align: top;
+            width: 30%;
+        }
+        #logout {
+            display: inline-block;
+            vertical-align: top;
+            width: 10%;
+            margin-left: 50%;
+        }
+        input {
+            width: 30%;
+        }
+        button {
+            width: 100px;
+            display: block;
+            margin-top: 30px;
+        }
+        .indent {
+            margin-left: 50px;
+            color: rgb(145, 36, 145);
+        }
+    </style>
+    <title>Looks like we made it</title>
+</head>
+<body>
+    <div class="header">
+        <h3>Welcome, {{request.session.first_name}}</h3>
+        <a href="/" id="logout">Log Out</a>
+    </div>
+    <div class="body">
+        <div class="left">
+            <h4>{{book.title}}</h4>
+            <p>You can thank {{book.uploaded_by.first_name}} for this!</p>
+            <p>They "did" it on {{book.created_at}}</p>
+            <p>Their thoughts on it:</p> 
+            <p class="indent">{{book.description}}</p>
+        </div>
+        <div class="right">
+            <h4>Users Who Less Than 3 This Title</h4>
+                <ul>
+                {% for x in book.users_who_like.all %}
+                    <li>{{x.first_name}}</li>
+                {% endfor %}
+                </ul>
+                {% if user in book.users_who_like.all %}
+                <a href="/remove_favorite/{{book.id}}" class="makeitgo">I didn't love it...</a>
+                {% else %}
+                <a href="/add_favorite/{{book.id}}" class="makeitso">Add to My Faves </a>
+                {% endif %}
+        </div>
+    </div>
+</body>
+</html>

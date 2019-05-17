@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"> -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <style>
+        * {
+            margin: 20px;
+            width: 1000px;
+        }
+        .love {
+            color: rgb(198, 23, 23);
+        }
+        .makeitso {
+            color: rgb(36, 154, 36);
+        }
+        .header {
+            border-bottom: 1px solid black;
+        }
+        .left {
+            display: inline-block;
+            vertical-align: top;
+            width: 30%;
+        }
+        .right {
+            display: inline-block;
+            vertical-align: top;
+            width: 40%;
+            margin-left: 200px;
+        }
+        h3 {
+            display: inline-block;
+            vertical-align: top;
+            width: 30%;
+        }
+        #logout {
+            display: inline-block;
+            vertical-align: top;
+            width: 10%;
+            margin-left: 50%;
+        }
+        input {
+            width: 30%;
+        }
+        button {
+            width: 100px;
+            display: block;
+            margin-top: 30px;
+        }
+        .bookclub {
+            display: block;
+
+        }
+    </style>
+    <title>Looks like we made it</title>
+</head>
+<body>
+    <div class="header">
+        <h3>Welcome, {{request.session.first_name}}</h3>
+        <a href="/" id="logout">Log Out</a>
+    </div>
+    <div class="body">
+        <div class="left">
+            <h4>Add a Favorite Book</h4>
+            <form action="/add_book" method="POST">
+                {% csrf_token %}
+                <label>Title</label>
+                <input type="text" name="title">
+                <label>Description</label>
+                <input type="text" name="description">
+                <button type="submit">Add</button>
+            </form>
+        </div>
+        <div class="right">
+            <h4>All Books</h4>
+            {% for book in all_books %}
+                <div class="bookclub">
+                    {% if request.session.first_name == book.uploaded_by.first_name %}
+                    <a href="/edit/{{book.id}}">{{book.title}}</a>
+                    {% else %}
+                    <a href="/book/{{book.id}}">{{book.title}}</a>
+                    {% endif %}
+                    <p>added by {{book.uploaded_by.first_name}}</p>
+                        {% if user in book.users_who_like.all %}
+                        <p class="love">It's a yes from me!</p>
+                        {% else %}
+                        <a href="/add_favorite/{{book.id}}" class="makeitso">Add to My Faves</a>
+                        {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>
